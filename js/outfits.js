@@ -2,7 +2,7 @@
    Outfits Module
    ======================================== */
 const Outfits = {
-  slots: ["Tops", "Bottoms", "Shoes", "Outerwear", "Accessories"],
+  slots: ["Tops", "Bottoms", "Shoes", "Outerwear", "Accessories", "Accessories"],
   currentOutfit: {}, // { slotName: itemId }
 
   async create(data) {
