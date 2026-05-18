@@ -135,6 +135,49 @@ const Suggestions = {
     return this._diversify(suggested, 8);
   },
 
+  getOccasionFromDate(date) {
+    const holidayOccasions = {
+      "1-1": "Festival",
+      "2-14": "Date Night",
+      "10-31": "Party",
+      "12-25": "Festival",
+      "12-31": "Party",
+    };
+
+    const key = `${date.getMonth() + 1}-${date.getDate()}`;
+    if (holidayOccasions[key]) return holidayOccasions[key];
+
+    const weekday = date.getDay();
+    if (weekday === 5) return "Date Night";
+    if (weekday === 6) return "Party";
+    if (weekday === 0) return "Casual";
+    return "Work";
+  },
+
+  async renderDateOccasion(date) {
+    const occasion = this.getOccasionFromDate(date);
+    const summary = document.getElementById("date-occasion-summary");
+    if (summary) {
+      summary.innerHTML = `Suggested occasion for ${date.toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "short",
+        day: "numeric",
+      })}: <strong>${occasion}</strong>`;
+    }
+
+    this.highlightOccasionChip(occasion);
+    await this.renderOccasionItems(occasion);
+  },
+
+  highlightOccasionChip(occasion) {
+    document.querySelectorAll(".occasion-chip").forEach((chip) => {
+      chip.classList.toggle(
+        "active",
+        chip.dataset.occasion === occasion,
+      );
+    });
+  },
+
   async getRandomOutfit() {
     const items = await Wardrobe.getAllItems();
     if (items.length === 0) return null;
@@ -188,6 +231,13 @@ const Suggestions = {
       </div>
 
       <h2 style="font-size:1.1rem;margin:1.5rem 0 0.75rem;">By Occasion</h2>
+      <div class="occasion-calendar" style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:1rem;margin-bottom:1rem;">
+        <div style="display:flex;flex-direction:column;gap:0.4rem;min-width:220px;">
+          <label for="occasion-date" style="font-size:0.85rem;color:var(--text-secondary);">Choose a date</label>
+          <input type="date" id="occasion-date" value="${new Date().toISOString().slice(0, 10)}" style="padding:0.85rem 1rem;border-radius:14px;border:1px solid var(--border-color);background:var(--bg-input);color:var(--text);" />
+        </div>
+        <div id="date-occasion-summary" style="color:var(--text-secondary);font-size:0.95rem;flex:1;min-width:180px;">Suggested occasion for today: <strong>${this.getOccasionFromDate(new Date())}</strong></div>
+      </div>
       <div class="occasion-chips" id="occasion-chips">
         ${Wardrobe.occasions.map((o) => `<button class="occasion-chip" data-occasion="${o}">${o}</button>`).join("")}
       </div>
