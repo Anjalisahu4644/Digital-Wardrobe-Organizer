@@ -4,7 +4,7 @@
 
 ## Features
 
-- User authentication with registration and login screens
+- User authentication with registration, login, and password recovery/change support
 - Personal wardrobe management with item details:
   - category, color, season, occasion, tags, images, notes
 - Outfit builder with support for selecting wardrobe pieces by slot
@@ -13,6 +13,7 @@
   - total items, saved outfits, wear count, favorites
 - IndexedDB storage for offline-first data persistence
 - Progressive Web App support with `manifest.json` and `sw.js`
+- Installable app experience with offline asset caching
 
 ## Pages
 
