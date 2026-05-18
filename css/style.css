@@ -482,6 +482,44 @@ textarea {
   color: var(--text-primary);
 }
 
+#mobile-profile-panel {
+  display: none;
+}
+
+#mobile-profile-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+#mobile-profile-actions {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  width: 200px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  padding: 0.75rem;
+  z-index: 120;
+}
+
+#mobile-profile-actions button {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+#mobile-profile-actions button:last-child {
+  margin-bottom: 0;
+}
+
 .mobile-action-buttons .btn-icon:hover {
   border-color: var(--accent-primary);
 }
@@ -1468,12 +1506,21 @@ textarea {
   }
 
   .mobile-action-bar {
+    display: none;
+  }
+
+  #mobile-profile-panel {
     display: flex;
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 110;
+    align-items: flex-start;
   }
 
   #main-content {
     margin-left: 0;
-    padding: calc(1rem + 56px) 1rem calc(var(--mobile-nav-height) + 1rem);
+    padding: 1rem 1rem calc(var(--mobile-nav-height) + 1rem);
   }
 
   .outfit-builder {
