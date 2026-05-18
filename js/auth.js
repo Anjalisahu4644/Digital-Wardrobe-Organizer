@@ -40,6 +40,29 @@ const Auth = {
     return user;
   },
 
+  async changePassword(currentPassword, newPassword) {
+    if (!this.currentUser) throw new Error("Not signed in");
+
+    const hash = await this.hashPassword(currentPassword);
+    if (hash !== this.currentUser.passwordHash)
+      throw new Error("Incorrect current password");
+
+    this.currentUser.passwordHash = await this.hashPassword(newPassword);
+    await DB.update("users", this.currentUser);
+    this.setSession(this.currentUser);
+    return this.currentUser;
+  },
+
+  async resetPassword(username, newPassword) {
+    const user = await DB.getByIndex("users", "username", username);
+    if (!user) throw new Error("User not found");
+
+    user.passwordHash = await this.hashPassword(newPassword);
+    await DB.update("users", user);
+
+    if (this.currentUser?.id === user.id) this.setSession(user);
+    return user;
+  },
   setSession(user) {
     this.currentUser = user;
     localStorage.setItem('wardrobe_session', JSON.stringify({
