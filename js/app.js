@@ -32,6 +32,60 @@ const App = {
     this.bindAuthEvents();
     this.bindNavEvents();
     this.bindModalEvents();
+    this.bindNotificationEvents();
+  },
+
+  notificationsSupported() {
+    return "Notification" in window && "serviceWorker" in navigator;
+  },
+
+  async enableNotifications() {
+    if (!this.notificationsSupported()) {
+      this.toast("Notifications are not supported in this browser.", "error");
+      return;
+    }
+
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission === "granted") {
+        this.toast("Notifications enabled!", "success");
+        this.sendTestNotification();
+      } else if (permission === "denied") {
+        this.toast("Notification permission denied.", "error");
+      } else {
+        this.toast("Notification request dismissed.", "info");
+      }
+    } catch (err) {
+      this.toast("Unable to enable notifications.", "error");
+      console.warn("Notification request failed:", err);
+    }
+  },
+
+  async sendTestNotification() {
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      registration.showNotification("Digital Wardrobe Organizer", {
+        body: "Notifications are enabled. You'll receive updates on your wardrobe.",
+        icon: "/icons/icon-192.png",
+        badge: "/icons/icon-192.png",
+        vibrate: [100, 50, 100],
+      });
+    } catch (err) {
+      console.warn("Notification send failed:", err);
+      if (Notification.permission === "granted") {
+        new Notification("Digital Wardrobe Organizer", {
+          body: "Notifications are enabled.",
+          icon: "/icons/icon-192.png",
+        });
+      }
+    }
+  },
+
+  bindNotificationEvents() {
+    const notifyBtn = document.getElementById("enable-notifications-btn");
+    if (notifyBtn) {
+      notifyBtn.addEventListener("click", () => this.enableNotifications());
+    }
   },
 
   // ---- Auth UI ----
