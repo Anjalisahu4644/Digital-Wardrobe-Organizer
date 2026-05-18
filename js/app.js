@@ -199,6 +199,7 @@ const App = {
         content.innerHTML = Suggestions.renderPage();
         await Suggestions.renderWeather();
         this.bindSuggestionEvents();
+        await Suggestions.renderDateOccasion(new Date());
         break;
 
       case "analytics":
@@ -446,6 +447,16 @@ const App = {
         Suggestions.renderOccasionItems(chip.dataset.occasion);
       });
     });
+
+    const dateInput = document.getElementById("occasion-date");
+    if (dateInput) {
+      dateInput.addEventListener("change", () => {
+        const selected = new Date(dateInput.value);
+        if (!isNaN(selected)) {
+          Suggestions.renderDateOccasion(selected);
+        }
+      });
+    }
   },
 
   // ---- Modal ----
