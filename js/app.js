@@ -82,10 +82,14 @@ const App = {
   },
 
   bindNotificationEvents() {
-    const notifyBtn = document.getElementById("enable-notifications-btn");
-    if (notifyBtn) {
-      notifyBtn.addEventListener("click", () => this.enableNotifications());
-    }
+    [
+      document.getElementById("enable-notifications-btn"),
+      document.getElementById("enable-notifications-mobile-btn"),
+    ].forEach((notifyBtn) => {
+      if (notifyBtn) {
+        notifyBtn.addEventListener("click", () => this.enableNotifications());
+      }
+    });
   },
 
   // ---- Auth UI ----
@@ -115,6 +119,36 @@ const App = {
       changePasswordButton.addEventListener("click", () =>
         this.showPasswordModal("change"),
       );
+    }
+
+    const mobileName = document.getElementById("mobile-user-name");
+    const mobileAvatar = document.getElementById("mobile-user-avatar");
+    if (mobileName) {
+      mobileName.textContent = user.name || user.username;
+    }
+    if (mobileAvatar) {
+      mobileAvatar.textContent = (user.name || user.username)
+        .charAt(0)
+        .toUpperCase();
+    }
+
+    const changePasswordMobile = document.getElementById(
+      "change-password-mobile-btn",
+    );
+    if (changePasswordMobile) {
+      changePasswordMobile.addEventListener("click", () =>
+        this.showPasswordModal("change"),
+      );
+    }
+
+    const logoutMobile = document.getElementById("logout-mobile-btn");
+    if (logoutMobile) {
+      logoutMobile.addEventListener("click", () => {
+        Auth.logout();
+        this.showAuth();
+        document.getElementById("login-username").value = "";
+        document.getElementById("login-password").value = "";
+      });
     }
   },
 
