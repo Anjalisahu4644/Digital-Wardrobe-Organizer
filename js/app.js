@@ -82,7 +82,7 @@ const App = {
       }
     });
      
-document
+   document
       .getElementById("show-reset-password")
       .addEventListener("click", (e) => {
         e.preventDefault();
