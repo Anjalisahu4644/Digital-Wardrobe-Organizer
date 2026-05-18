@@ -33,6 +33,7 @@ const App = {
     this.bindNavEvents();
     this.bindModalEvents();
     this.bindNotificationEvents();
+    this.bindMobileProfileEvents();
   },
 
   notificationsSupported() {
@@ -92,6 +93,47 @@ const App = {
     });
   },
 
+  bindMobileProfileEvents() {
+    const profileButton = document.getElementById("mobile-profile-button");
+    const profileActions = document.getElementById("mobile-profile-actions");
+
+    if (profileButton && profileActions) {
+      profileButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        profileActions.classList.toggle("hidden");
+      });
+
+      document.addEventListener("click", () => {
+        profileActions.classList.add("hidden");
+      });
+
+      profileActions.addEventListener("click", (e) => {
+        e.stopPropagation();
+      });
+    }
+
+    const changePasswordMobile = document.getElementById(
+      "change-password-mobile-btn",
+    );
+    if (changePasswordMobile) {
+      changePasswordMobile.addEventListener("click", () => {
+        this.showPasswordModal("change");
+        profileActions?.classList.add("hidden");
+      });
+    }
+
+    const logoutMobile = document.getElementById("logout-mobile-btn");
+    if (logoutMobile) {
+      logoutMobile.addEventListener("click", () => {
+        Auth.logout();
+        this.showAuth();
+        profileActions?.classList.add("hidden");
+        document.getElementById("login-username").value = "";
+        document.getElementById("login-password").value = "";
+      });
+    }
+  },
+
   // ---- Auth UI ----
   showAuth() {
     document.getElementById("auth-screen").classList.remove("hidden");
@@ -130,25 +172,6 @@ const App = {
       mobileAvatar.textContent = (user.name || user.username)
         .charAt(0)
         .toUpperCase();
-    }
-
-    const changePasswordMobile = document.getElementById(
-      "change-password-mobile-btn",
-    );
-    if (changePasswordMobile) {
-      changePasswordMobile.addEventListener("click", () =>
-        this.showPasswordModal("change"),
-      );
-    }
-
-    const logoutMobile = document.getElementById("logout-mobile-btn");
-    if (logoutMobile) {
-      logoutMobile.addEventListener("click", () => {
-        Auth.logout();
-        this.showAuth();
-        document.getElementById("login-username").value = "";
-        document.getElementById("login-password").value = "";
-      });
     }
   },
 
