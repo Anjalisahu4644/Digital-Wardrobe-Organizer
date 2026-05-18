@@ -81,7 +81,13 @@ const App = {
         errEl.textContent = err.message;
       }
     });
-
+     
+document
+      .getElementById("show-reset-password")
+      .addEventListener("click", (e) => {
+        e.preventDefault();
+        this.showPasswordModal("reset");
+      });
     // Register
     document.getElementById('register-form').addEventListener('submit', async (e) => {
       e.preventDefault();
