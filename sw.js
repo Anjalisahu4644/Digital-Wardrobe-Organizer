@@ -44,6 +44,16 @@ self.addEventListener("fetch", (e) => {
   // Skip non-GET and external requests
   if (e.request.method !== "GET") return;
 
+  // Handle navigation requests with a shell fallback
+  if (e.request.mode === "navigate") {
+    e.respondWith(
+      caches.match("./index.html").then((cached) => {
+        return cached || fetch(e.request).catch(() => caches.match("./index.html"));
+      }),
+    );
+    return;
+  }
+
   // For API calls (weather), use network first
   if (e.request.url.includes("api.open-meteo.com")) {
     e.respondWith(
